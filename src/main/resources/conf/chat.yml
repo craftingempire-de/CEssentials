@@ -1,0 +1,11 @@
+config-version: 1 # DO NOT CHANGE
+
+chat-format: "{prefix}&r {username-color}{name}&r {suffix}&r &r&#CCCCCC»&r {message-color}{message}&r"
+
+group-formats:
+#  default: "[default] {name} &r» {message}"
+#  admin: "[admin] {name} &r» {message}"
+
+msg:
+  sender: '&o&7Du schreibst {target}: {message}'
+  target: '&o&7{sender} schreibt dir: {message}'

@@ -1,0 +1,18 @@
+# IntelliJ IDEA
+/**/.idea/
+/**/out/
+/**/*.iml
+
+# Eclipse IDE
+/**/bin/
+/**/.settings/
+/**/.settings
+/**/.project
+/**/.classpath
+
+# Maven
+/**/build/
+/**/target/
+/**/depedency-reduced-pom.xml
+
+/**/deploy.sh

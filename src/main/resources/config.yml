@@ -1,0 +1,7 @@
+config-version: 1
+plugin:
+  prefix: '&6[CraftingEmpire]&r'
+
+database:
+  connectionString: "mongodb://connection"
+  name: 'dbName'

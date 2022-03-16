@@ -1,0 +1,17 @@
+name: CEssentialsPlugin
+version: ${project.version}
+api-version: 1.18
+main: de.craftingempire.essentials.CEssentialsPlugin
+description: Dieses Plugin added dem CraftingEmpire Server generelle Funktionen und Commands
+authors:
+  - LuciferMorningstarDev
+
+website: https://lucifer-morningstar.dev/
+
+depend:
+  - LuckPerms
+
+softdepend:
+  - PlaceholderAPI
+
+load: STARTUP
