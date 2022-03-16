@@ -21,21 +21,19 @@
 package de.craftingempire.essentials;
 
 import com.google.common.collect.Lists;
-import de.craftingempire.essentials.commands.bukkit.GamemodeCommand;
-import de.craftingempire.essentials.commands.bukkit.WhisperCommand;
-import de.craftingempire.essentials.commands.essential.ReloadCommand;
-import de.craftingempire.essentials.commands.essential.ReplyCommand;
-import de.craftingempire.essentials.commands.essential.SpawnCommand;
-import de.craftingempire.essentials.commands.essential.SpeedCommand;
+import de.craftingempire.essentials.api.Essentials;
+import de.craftingempire.essentials.api.EssentialsImpl;
+import de.craftingempire.essentials.commands.bukkit.*;
+import de.craftingempire.essentials.commands.essential.*;
 import de.craftingempire.essentials.database.MongoDatabaseHandler;
-import de.craftingempire.essentials.listener.DefaultChatListener;
+import de.craftingempire.essentials.listener.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.event.HoverEvent;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -65,6 +63,8 @@ public class CEssentialsPlugin extends JavaPlugin {
 
     private FileConfiguration chatFormatConfig;
 
+    private static Essentials api;
+
     @Override
     public void onLoad() {
         instance = this;
@@ -87,11 +87,14 @@ public class CEssentialsPlugin extends JavaPlugin {
 
         this.registerEventsAndCommands();
 
+        this.registerApi();
+
         this.getLogger().info(CHAT_PREFIX.replace("&", "§") + "§aEssentials enabled...");
     }
 
     @Override
     public void onDisable() {
+        Bukkit.getServicesManager().unregisterAll(this);
         Bukkit.getScheduler().cancelTasks(this);
 
         try {
@@ -128,6 +131,11 @@ public class CEssentialsPlugin extends JavaPlugin {
                 new WhisperCommand(this)
         ));
 
+        this.registerDatabaseConfigCommands();
+
+    }
+
+    private void registerDatabaseConfigCommands() {
         Document spawnCmdConfig = db().getDocument("commands", "spawn");
         if(spawnCmdConfig == null) {
             spawnCmdConfig = db().buildDocument("spawn", new Object[][]{
@@ -139,7 +147,11 @@ public class CEssentialsPlugin extends JavaPlugin {
         if(spawnCmdConfig.getBoolean("enabled")) {
             Bukkit.getCommandMap().register("essentials", new SpawnCommand(this, spawnCmdConfig));
         }
+    }
 
+    private void registerApi() {
+        api = new EssentialsImpl(this);
+        Bukkit.getServicesManager().register(Essentials.class, api, this, ServicePriority.High);
     }
 
     public static String getChatPrefix() {
@@ -156,6 +168,10 @@ public class CEssentialsPlugin extends JavaPlugin {
 
     public FileConfiguration getChatFormatConfig() {
         return chatFormatConfig;
+    }
+
+    public static Essentials getApi() {
+        return api;
     }
 
 }

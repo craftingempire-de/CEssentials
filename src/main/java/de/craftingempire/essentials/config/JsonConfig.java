@@ -31,6 +31,7 @@ import java.io.IOException;
  * @author LuciferMorningstarDev - https://github.com/LuciferMorningstarDev
  * @since 14.03.2022
  */
+@SuppressWarnings("unsafe")
 public class JsonConfig<T> {
 
     private final File dataFile;
